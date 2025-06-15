@@ -1,52 +1,48 @@
 {
   "name": "web3-file-app",
   "version": "1.0.0",
-  "main": "src/main/index.js",
+  "main": "dist/main/index.js",
   "type": "module",
+  "description": "A cross-platform desktop app for Web3 file management",
+  "author": "Your Name <your.email@example.com>",
   "scripts": {
-    "dev": "concurrently \"vite\" \"electron .\"",
-    "build": "tsc && vite build && electron-builder"
+    "dev": "concurrently \"vite\" \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.json && vite build && electron-builder"
   },
   "build": {
     "appId": "com.example.web3fileapp",
-    "files": [
-      "dist/**/*",
-      "src/main/**/*"
-    ],
+    "files": ["dist/main/**/*", "dist/renderer/**/*", "dist/**/*"],
     "mac": {
-      "target": [
-        "dmg"
-      ],
+      "target": ["dmg"],
       "artifactName": "${name}-${version}-${arch}.${ext}"
     },
     "win": {
-      "target": [
-        "nsis"
-      ],
+      "target": ["nsis"],
       "artifactName": "${name}-${version}.${ext}"
     }
   },
   "dependencies": {
-    "electron": "^36.4.0",
-    "electron-builder": "^26.0.12",
     "ethers": "^6.14.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "siwe": "^3.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "siwe": "^2.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
-    "@types/node": "^24.0.1",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "concurrently": "^9.1.2",
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3",
     "eslint": "^9.25.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "eslint-plugin-react-hooks": "^5.1.0-rc-fb9a90fa48-20240614",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "globals": "^15.9.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.7.0",
+    "vite": "^5.4.8"
   }
 }
