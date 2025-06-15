@@ -11,8 +11,8 @@ A minimal cross-platform desktop app built with Electron, Vite, TypeScript, and 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/web3-file-app.git
-   cd web3-file-app
+   git clone https://github.com/charly-com/Quiklabs.git
+   cd my-app
 
 2. 🚀 Install Dependencies
 

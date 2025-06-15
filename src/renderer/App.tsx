@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { SiweMessage } from 'siwe';
 
+// Extend Window interface to include ethereum
 declare global {
   interface Window {
+    ethereum?: import('ethers').Eip1193Provider; // Use Eip1193Provider for MetaMask
     api: {
       selectFolder: () => Promise<string | null>;
       saveFile: (filename: string, content: string) => Promise<void>;
@@ -21,7 +23,7 @@ export default function App() {
   const [files, setFiles] = useState<string[]>([]);
   const [selectedFileContent, setSelectedFileContent] = useState('');
 
-   async function signInWithEthereum() {
+  async function signInWithEthereum() {
     if (!window.ethereum) {
       alert('MetaMask not detected');
       return;
@@ -37,12 +39,12 @@ export default function App() {
       statement: 'Sign in to Web3 File App',
       uri: window.location.origin,
       version: '1',
-      chainId: await signer.getChainId(),
+      chainId: Number((await provider.getNetwork()).chainId), // Use provider.getNetwork()
       nonce: Math.random().toString(36).slice(2),
     });
 
     try {
-      const signature = await signer.signMessage(message.prepareMessage());
+      await signer.signMessage(message.prepareMessage()); // Signature not needed for display
       setWalletAddress(address);
     } catch (error) {
       console.error('Sign-in failed:', error);
@@ -64,20 +66,22 @@ export default function App() {
     loadFiles();
   }
 
-  async function loadFiles() {
+  // Use useCallback to memoize loadFiles
+  const loadFiles = useCallback(async () => {
     if (!folder) return;
     const fileList = await window.api.listFiles();
     setFiles(fileList);
-  }
+  }, [folder]); // Add folder as dependency
 
   async function openFile(file: string) {
     const fileContent = await window.api.readFile(file);
     setSelectedFileContent(fileContent);
   }
 
+  // Include loadFiles in useEffect dependency array
   useEffect(() => {
     if (folder) loadFiles();
-  }, [folder]);
+  }, [folder, loadFiles]);
 
   return (
     <div style={{ padding: '20px' }}>
@@ -112,14 +116,10 @@ export default function App() {
                 </li>
               ))}
             </ul>
-            {selectedFileContent && (
-              <pre>Content: {selectedFileContent}</pre>
-            )}
+            {selectedFileContent && <pre>Content: {selectedFileContent}</pre>}
           </div>
         </>
       )}
     </div>
   );
 }
-
-
