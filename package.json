@@ -16,6 +16,7 @@
       "dist/renderer/**/*",
       "dist/**/*"
     ],
+    "asar": false,
     "mac": {
       "target": [
         "dmg"
