@@ -5,15 +5,16 @@ import fs from 'fs/promises';
 let selectedFolder: string | null = null;
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+          preload: path.join(__dirname, 'preload.js'),
+          contextIsolation: true,
+          nodeIntegration: false,
+          webSecurity: false, // Disable for local dev (enable in production)
+        },
+      });
   const url = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
   win.loadURL(url);
 }

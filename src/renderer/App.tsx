@@ -24,7 +24,15 @@ export default function App() {
 
   async function signInWithEthereum() {
     if (!window.ethereum) {
-      alert('MetaMask not detected');
+      console.log('MetaMask not detected, checking environment...');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Mocking MetaMask for Electron dev...');
+        // Mock provider (for testing only)
+        alert('Mock MetaMask: Use browser with MetaMask for real sign-in');
+        setWalletAddress('0xMockAddress1234567890');
+        return;
+      }
+      alert('MetaMask not detected. Please install MetaMask.');
       return;
     }
     const provider = new ethers.BrowserProvider(window.ethereum);
